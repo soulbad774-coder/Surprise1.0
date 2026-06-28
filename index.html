@@ -14,6 +14,7 @@ overflow:hidden;
 color:white;
 }
 
+/* APP */
 .app{
 height:100vh;
 display:flex;
@@ -24,17 +25,240 @@ padding:20px;
 
 .card{
 background:rgba(255,255,255,0.08);
-backdrop-filter:blur(12px);
+backdrop-filter:blur(14px);
 padding:30px;
 border-radius:20px;
 text-align:center;
 width:100%;
 max-width:600px;
-box-shadow:0 20px 60px rgba(0,0,0,0.2);
+box-shadow:0 20px 60px rgba(0,0,0,0.3);
 }
 
+/* PAGES */
+.page{display:none;}
+.page.active{display:block;}
+
+/* BUTTONS */
 .btn{
 padding:12px 18px;
+margin:8px;
+border:none;
+border-radius:12px;
+cursor:pointer;
+font-weight:bold;
+}
+
+.yes{background:#fff;color:#000}
+.no{background:transparent;color:#fff;border:1px solid #fff}
+
+/* HEARTS + ROSES */
+.hearts,.roses{
+position:fixed;
+inset:0;
+pointer-events:none;
+z-index:0;
+}
+
+.heart,.rose{
+position:absolute;
+opacity:0.8;
+animation:float linear infinite;
+}
+
+@keyframes float{
+0%{transform:translateY(100vh) rotate(0deg)}
+100%{transform:translateY(-10vh) rotate(360deg)}
+}
+
+/* POPUP */
+.popup{
+position:fixed;
+inset:0;
+display:none;
+align-items:center;
+justify-content:center;
+background:rgba(0,0,0,0.6);
+z-index:10;
+}
+
+.popup.show{display:flex}
+
+.box{
+background:white;
+color:black;
+padding:20px;
+border-radius:14px;
+text-align:center;
+}
+
+/* TOAST */
+.toast{
+position:fixed;
+bottom:20px;
+right:20px;
+background:black;
+color:white;
+padding:10px 14px;
+border-radius:8px;
+opacity:0;
+transition:0.3s;
+z-index:20;
+}
+
+.toast.show{opacity:1}
+</style>
+</head>
+
+<body>
+
+<div class="hearts" id="hearts"></div>
+<div class="roses" id="roses"></div>
+
+<div class="app">
+<div class="card">
+
+<!-- PAGE 1 -->
+<div class="page active">
+<h2>I made something special for you, Abiroo ❤️</h2>
+<p>Just start and feel it...</p>
+<button class="btn" onclick="next()">Start</button>
+</div>
+
+<!-- PAGE 2 -->
+<div class="page">
+<h2>Wait...</h2>
+<p>Please don’t skip this journey ❤️</p>
+<button class="btn" onclick="next()">Continue</button>
+</div>
+
+<!-- PAGE 3 -->
+<div class="page">
+<h2>Our Story</h2>
+<p>From strangers to something unforgettable...</p>
+<button class="btn" onclick="next()">Next</button>
+</div>
+
+<!-- PAGE 4 -->
+<div class="page">
+<h2>Feelings</h2>
+<p>You slowly became my favorite person ❤️</p>
+<button class="btn" onclick="next()">Next</button>
+</div>
+
+<!-- PAGE 5 -->
+<div class="page">
+<h2>One Truth</h2>
+<p>My heart chose you without asking me...</p>
+<button class="btn" onclick="next()">Next</button>
+</div>
+
+<!-- PAGE 6 -->
+<div class="page">
+<h2>Final Moment</h2>
+<p>Now I need one answer from you...</p>
+<button class="btn" onclick="next()">Continue</button>
+</div>
+
+<!-- PAGE 7 -->
+<div class="page">
+<h2>Will you be my girlfriend? ❤️</h2>
+<button class="btn yes" onclick="answer('YES')">YES ❤️</button>
+<button class="btn no" onclick="answer('NO')">NO 💔</button>
+<p id="msg"></p>
+</div>
+
+</div>
+</div>
+
+<!-- POPUP -->
+<div class="popup" id="popup">
+<div class="box">
+<h3>Copied ❤️</h3>
+<p id="copyText"></p>
+<button class="btn yes" onclick="closePopup()">Close</button>
+</div>
+</div>
+
+<div class="toast" id="toast">Copied Successfully ❤️</div>
+
+<script>
+
+let pages=document.querySelectorAll(".page");
+let i=0;
+
+function show(n){
+if(n < 0 || n >= pages.length) return;
+pages.forEach(p=>p.classList.remove("active"));
+pages[n].classList.add("active");
+i=n;
+}
+
+function next(){
+show(i+1);
+}
+
+function answer(ans){
+
+let text = (ans==="YES")
+? "Yes I will be your girlfriend ❤️"
+: "Sorry I am not interested 💔";
+
+document.getElementById("msg").innerText =
+(ans==="YES") ? "She said YES ❤️" : "She said NO 💔";
+
+/* COPY */
+if(navigator.clipboard && window.isSecureContext){
+navigator.clipboard.writeText(text);
+}else{
+let ta=document.createElement("textarea");
+ta.value=text;
+document.body.appendChild(ta);
+ta.select();
+document.execCommand("copy");
+ta.remove();
+}
+
+/* POPUP + TOAST */
+document.getElementById("copyText").innerText=text;
+document.getElementById("popup").classList.add("show");
+
+let t=document.getElementById("toast");
+t.classList.add("show");
+setTimeout(()=>t.classList.remove("show"),2000);
+}
+
+function closePopup(){
+document.getElementById("popup").classList.remove("show");
+}
+
+/* HEARTS */
+let h=document.getElementById("hearts");
+for(let k=0;k<60;k++){
+let d=document.createElement("div");
+d.className="heart";
+d.innerHTML="❤️";
+d.style.left=Math.random()*100+"%";
+d.style.fontSize=(10+Math.random()*20)+"px";
+d.style.animationDuration=(4+Math.random()*6)+"s";
+h.appendChild(d);
+}
+
+/* ROSES */
+let r=document.getElementById("roses");
+for(let k=0;k<40;k++){
+let d=document.createElement("div");
+d.className="rose";
+d.innerHTML="🌹";
+d.style.left=Math.random()*100+"%";
+d.style.fontSize=(12+Math.random()*22)+"px";
+d.style.animationDuration=(5+Math.random()*6)+"s";
+r.appendChild(d);
+}
+
+</script>
+
+</body>
+</html>padding:12px 18px;
 margin:8px;
 border:none;
 border-radius:12px;
