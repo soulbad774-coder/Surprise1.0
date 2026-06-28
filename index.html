@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hi Abiroo ❤️</title>
+
+<style>
+:root{
+--p1:#ff6fae;
+--p2:#7b61ff;
+--glass:rgba(255,255,255,0.08);
+--text:#fff;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}
+
+body{
+height:100vh;
+overflow:hidden;
+background:linear-gradient(120deg,var(--p1),var(--p2));
+color:white;
+}
+
+/* HEARTS */
+.hearts{
+position:fixed;inset:0;pointer-events:none;
+}
+
+.heart{
+position:absolute;
+width:12px;height:12px;
+background:#ff4d88;
+transform:rotate(45deg);
+animation:float 10s linear infinite;
+opacity:0.7;
+}
+
+.heart:before,.heart:after{
+content:"";
+position:absolute;
+width:12px;height:12px;
+background:#ff4d88;
+border-radius:50%;
+}
+.heart:before{left:-6px}
+.heart:after{top:-6px}
+
+@keyframes float{
+from{transform:translateY(100vh) rotate(45deg)}
+to{transform:translateY(-10vh) rotate(45deg)}
+}
+
+/* APP */
+.app{
+height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:20px;
+}
+
+.card{
+width:100%;
+max-width:900px;
+background:var(--glass);
+backdrop-filter:blur(12px);
+border-radius:20px;
+padding:25px;
+position:relative;
+}
+
+/* PAGE SYSTEM */
+.page{display:none;animation:fade .4s ease}
+.page.active{display:block}
+
+@keyframes fade{
+from{opacity:0;transform:translateY(20px)}
+to{opacity:1;transform:translateY(0)}
+}
+
+h1,h2{margin-bottom:10px}
+p{opacity:.85;line-height:1.5}
+
+/* BUTTONS */
+.btn{
+padding:10px 15px;
+border:none;
+border-radius:10px;
+cursor:pointer;
+background:white;
+color:black;
+font-weight:bold;
+margin-top:10px;
+}
+
+.btn.alt{
+background:transparent;
+color:white;
+border:1px solid white;
+}
+
+/* GRID */
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+gap:10px;
+}
+
+.box{
+padding:12px;
+background:rgba(255,255,255,0.1);
+border-radius:10px;
+}
+
+/* BIG HEART */
+.big{
+font-size:70px;
+animation:beat 1s infinite;
+}
+
+@keyframes beat{
+50%{transform:scale(1.2)}
+}
+
+/* POPUP */
+.popup{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.5);
+display:none;
+align-items:center;
+justify-content:center;
+}
+
+.popup.show{display:flex}
+
+.popup-box{
+background:white;
+color:black;
+padding:20px;
+border-radius:12px;
+}
+
+/* TOAST */
+.toast{
+position:fixed;
+bottom:20px;
+right:20px;
+background:black;
+color:white;
+padding:10px 14px;
+border-radius:10px;
+opacity:0;
+transition:.3s;
+}
+
+.toast.show{opacity:1}
+
+/* CANVAS */
+canvas{
+position:fixed;
+inset:0;
+pointer-events:none;
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="confetti"></canvas>
+<div class="hearts" id="hearts"></div>
+
+<div class="app">
+<div class="card">
+
+<!-- PAGE 1 -->
+<div class="page active">
+<h1>Hi Abiroo ❤️</h1>
+<p>I made something very special just for you.</p>
+<button class="btn" onclick="next()">Begin Our Journey</button>
+</div>
+
+<!-- PAGE 2 -->
+<div class="page">
+<h2>A Small Request</h2>
+<p>Please don't leave till the end ❤️</p>
+<button class="btn" onclick="next()">Next</button>
+</div>
+
+<!-- PAGE 3 -->
+<div class="page">
+<h2>Our Story</h2>
+<p>From strangers to something beautiful ❤️</p>
+<button class="btn" onclick="next()">Next</button>
+</div>
+
+<!-- PAGE 4 -->
+<div class="page">
+<h2>Dear Abiroo</h2>
+<p>You are special in every way ❤️</p>
+<button class="btn" onclick="next()">Next</button>
+</div>
+
+<!-- PAGE 5 -->
+<div class="page">
+<h2>Why I Love You</h2>
+<div class="grid">
+<div class="box">Smile</div>
+<div class="box">Care</div>
+<div class="box">Kindness</div>
+<div class="box">Vibe</div>
+<div class="box">Soul</div>
+</div>
+<button class="btn" onclick="next()">Next</button>
+</div>
+
+<!-- PAGE 6 -->
+<div class="page">
+<h2>Promises</h2>
+<p>I will always respect and support you ❤️</p>
+<button class="btn" onclick="next()">Next</button>
+</div>
+
+<!-- PAGE 7 -->
+<div class="page">
+<div class="big">❤️</div>
+<h2>There is only one question left...</h2>
+<button class="btn" onclick="next()">Continue</button>
+</div>
+
+<!-- PAGE 8 -->
+<div class="page">
+<h2>Will you be my girlfriend?</h2>
+<button class="btn" onclick="yes()">YES ❤️</button>
+<button class="btn alt" onclick="no()">NO 💔</button>
+<p id="noMsg"></p>
+</div>
+
+<!-- PAGE 9 -->
+<div class="page">
+<h2>Questions</h2>
+<p id="q"></p>
+<button class="btn" onclick="answer('YES')">YES</button>
+<button class="btn" onclick="answer('NO')">NO</button>
+<button class="btn" id="finish" style="display:none" onclick="finish()">Finish</button>
+</div>
+
+<!-- PAGE 10 -->
+<div class="page">
+<h2>Thank You ❤️</h2>
+<p>You made me the happiest person ❤️</p>
+<button class="btn" onclick="copy()">Copy Answers</button>
+</div>
+
+</div>
+</div>
+
+<div class="popup" id="popup">
+<div class="popup-box">
+<h3>Thank You ❤️</h3>
+<button class="btn" onclick="closePopup()">Close</button>
+</div>
+</div>
+
+<div class="toast" id="toast">Copied ❤️</div>
+
+<script>
+let pages=document.querySelectorAll(".page");
+let i=0;
+
+function show(n){
+pages.forEach(p=>p.classList.remove("active"));
+pages[n].classList.add("active");
+i=n;
+}
+
+function next(){show(i+1)}
+
+/* hearts */
+let h=document.getElementById("hearts");
+for(let i=0;i<25;i++){
+let d=document.createElement("div");
+d.className="heart";
+d.style.left=Math.random()*100+"%";
+d.style.animationDuration=(5+Math.random()*10)+"s";
+h.appendChild(d);
+}
+
+/* FLOW */
+function yes(){
+startConfetti();
+show(8);
+setTimeout(()=>show(9),1200);
+}
+
+function no(){
+document.getElementById("noMsg").innerText="I will always respect you ❤️";
+}
+
+/* QUESTIONS FIXED */
+let qs=[
+"Will you send voice note?",
+"Will you send photo?",
+"Will you send fit check?",
+"Will you send cute selfie?",
+"Will you send smile pic?"
+];
+
+let q=0;
+let ans=[];
+
+function load(){
+document.getElementById("q").innerText=qs[q];
+}
+load();
+
+function answer(a){
+ans.push(qs[q]+" = "+a);
+q++;
+if(q<qs.length){
+load();
+}else{
+document.getElementById("finish").style.display="block";
+document.getElementById("q").innerText="All done ❤️";
+}
+}
+
+function finish(){
+show(9);
+}
+
+/* COPY */
+function copy(){
+navigator.clipboard.writeText(ans.join("\n"));
+document.getElementById("toast").classList.add("show");
+document.getElementById("popup").classList.add("show");
+setTimeout(()=>document.getElementById("toast").classList.remove("show"),2000);
+}
+
+function closePopup(){
+document.getElementById("popup").classList.remove("show");
+}
+
+/* CONFETTI CANVAS */
+const canvas=document.getElementById("confetti");
+const ctx=canvas.getContext("2d");
+canvas.width=innerWidth;
+canvas.height=innerHeight;
+
+function startConfetti(){
+let pieces=[];
+for(let i=0;i<120;i++){
+pieces.push({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height/2,
+r:Math.random()*6,
+d:Math.random()*120
+});
+}
+
+function draw(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+pieces.forEach(p=>{
+ctx.fillStyle="white";
+ctx.fillRect(p.x,p.y,p.r,p.r);
+p.y+=3;
+if(p.y>canvas.height)p.y=0;
+});
+requestAnimationFrame(draw);
+}
+draw();
+}
+
+/* hearts init */
+for(let i=0;i<20;i++){
+let d=document.createElement("div");
+d.className="heart";
+d.style.left=Math.random()*100+"%";
+d.style.animationDuration=(6+Math.random()*10)+"s";
+h.appendChild(d);
+}
+
+</script>
+
+</body>
+</html>
