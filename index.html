@@ -1,40 +1,167 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Romantic AI Chat ❤️</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>For Abiroo ❤️</title>
 
 <style>
 body{
 margin:0;
 font-family:system-ui;
-background:linear-gradient(135deg,#ff7ab6,#7b61ff);
-height:100vh;
+background:linear-gradient(120deg,#ff6fa3,#7b61ff);
 overflow:hidden;
-color:#fff;
+color:white;
 }
 
-/* hearts */
-.hearts{
+.app{
+height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:20px;
+}
+
+.card{
+background:rgba(255,255,255,0.08);
+backdrop-filter:blur(12px);
+padding:30px;
+border-radius:20px;
+text-align:center;
+width:100%;
+max-width:600px;
+box-shadow:0 20px 60px rgba(0,0,0,0.2);
+}
+
+.btn{
+padding:12px 18px;
+margin:8px;
+border:none;
+border-radius:12px;
+cursor:pointer;
+font-weight:bold;
+}
+
+.yes{background:#fff;color:#000}
+.no{background:transparent;color:#fff;border:1px solid #fff}
+
+/* FLOATING HEARTS */
+.hearts,.roses{
 position:fixed;
 inset:0;
 pointer-events:none;
 }
-.heart{
+
+.heart,.rose{
 position:absolute;
-width:10px;
-height:10px;
-background:#ff4d94;
-transform:rotate(45deg);
-animation:float 10s linear infinite;
+font-size:18px;
+animation:float 8s linear infinite;
+opacity:0.8;
 }
-.heart:before,.heart:after{
-content:"";
-position:absolute;
-width:10px;
-height:10px;
-background:#ff4d94;
+
+@keyframes float{
+0%{transform:translateY(100vh) rotate(0deg)}
+100%{transform:translateY(-10vh) rotate(360deg)}
+}
+
+/* POPUP */
+.popup{
+position:fixed;
+inset:0;
+display:none;
+align-items:center;
+justify-content:center;
+background:rgba(0,0,0,0.6);
+}
+
+.popup.show{display:flex}
+
+.box{
+background:white;
+color:black;
+padding:20px;
+border-radius:14px;
+text-align:center;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="hearts" id="hearts"></div>
+<div class="roses" id="roses"></div>
+
+<div class="app">
+<div class="card">
+
+<h2>Will you be my girlfriend? ❤️</h2>
+
+<button class="btn yes" onclick="yes()">YES ❤️</button>
+<button class="btn no" onclick="no()">NO 💔</button>
+
+<p id="msg"></p>
+
+</div>
+</div>
+
+<div class="popup" id="popup">
+<div class="box">
+<h3>Copied ❤️</h3>
+<p id="copyText"></p>
+<button class="btn yes" onclick="closePopup()">Close</button>
+</div>
+</div>
+
+<script>
+
+let hearts=document.getElementById("hearts");
+let roses=document.getElementById("roses");
+
+/* 2X HEARTS */
+for(let i=0;i<60;i++){
+let h=document.createElement("div");
+h.className="heart";
+h.innerHTML="❤️";
+h.style.left=Math.random()*100+"%";
+h.style.animationDuration=(5+Math.random()*5)+"s";
+h.style.fontSize=(10+Math.random()*20)+"px";
+hearts.appendChild(h);
+}
+
+/* ROSES FALL */
+for(let i=0;i<40;i++){
+let r=document.createElement("div");
+r.className="rose";
+r.innerHTML="🌹";
+r.style.left=Math.random()*100+"%";
+r.style.animationDuration=(6+Math.random()*6)+"s";
+r.style.fontSize=(12+Math.random()*22)+"px";
+roses.appendChild(r);
+}
+
+function yes(){
+copy("Yes I will be your girlfriend ❤️");
+}
+
+function no(){
+copy("Sorry I am not interested 💔");
+}
+
+function copy(text){
+navigator.clipboard.writeText(text);
+document.getElementById("copyText").innerText=text;
+document.getElementById("popup").classList.add("show");
+}
+
+function closePopup(){
+document.getElementById("popup").classList.remove("show");
+}
+
+</script>
+
+</body>
+</html>background:#ff4d94;
 border-radius:50%;
 }
 .heart:before{left:-5px}
